@@ -1,11 +1,16 @@
 #!/usr/bin/python
 import configparser
-import pprint
-from classes import Sqlite
+from classes.db import Sqlite
+
 
 def createdb(name):
-    sql = Sqlite()
-    sql.connect(name)
+    try:
+        sql = Sqlite()
+        sql.connect(name)
+        sql.execute("create table weather_info(id int,json text)")
+    except:
+        print("Can\'t create database or tables")
+
 
 def main():
     print("Initializing parameters for EveIAb")
