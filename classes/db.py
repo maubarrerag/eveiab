@@ -9,6 +9,9 @@ class Sqlite(object):
     def connect(self, database):
         self.conn = sqlite3.connect(database)
 
-    def execute(self, sql):
+    def execute(self, sql, obj):
         cur = self.conn.cursor()
-        cur.execute(sql)
+        cur.execute(sql, obj)
+
+    def commit(self):
+        self.conn.commit()
