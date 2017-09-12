@@ -17,10 +17,10 @@ def createdb(name):
 
 def savefirst(name, info):
     try:
-       sql = Sqlite()
-       sql.connect(name)
-       sql.execute("insert into weather_info values(1,?,DATETIME('now'))", (info, ))
-       sql.commit()
+        sql = Sqlite()
+        sql.connect(name)
+        sql.execute("insert into weather_info values(1,?,DATETIME('now'))", (info, ))
+        sql.commit()
     except:
         print("Problem saving information")
         raise
@@ -56,6 +56,7 @@ def main():
     weather(config)
     print("Testing HUE phillips service")
     hue(config)
+    print("Ready to Go, just start service and enjoy :)")
 
 if __name__ == '__main__':
     main()
