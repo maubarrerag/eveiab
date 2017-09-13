@@ -12,6 +12,10 @@ class Sqlite(object):
     def execute(self, sql, obj):
         cur = self.conn.cursor()
         cur.execute(sql, obj)
+        return cur
+
+    def fecth_one(self, cursor):
+        return cursor.fetchone()
 
     def commit(self):
         self.conn.commit()

@@ -1,6 +1,7 @@
 import configparser
 import time
 import datetime
+import json
 from classes.db import Sqlite
 from classes.weather import Weather
 from classes.hue import Huebridge
@@ -20,9 +21,13 @@ def todayAt(hr, min=0):
     return now.replace(hour=hr, minute=min)
 
 
-def getweatherinfo(config):
+def getweatherinfo(config,now):
     sql = Sqlite()
     sql.connect(config.get("global", "database"))
+    cursor = sql.execute("select json from weather_info order by update_t desc limit 1", ())
+    obj = json.loads(sql.fecth_one(cursor)[0])
+    sunset = datetime.datetime.fromtimestamp(int(obj["sys"]["sunset"]))
+    sunrise = datetime.daetime.fromtimestamp(int(obj["sys"]["sunrise"]))
 
 
 def checktime(config):
@@ -33,7 +38,7 @@ def checktime(config):
         weatherupdate(config)
     else:
         #Check if we need to turn on/off the lights
-        getweatherinfo(config)
+        getweatherinfo(config, now)
 
 
 def createcron(config):
