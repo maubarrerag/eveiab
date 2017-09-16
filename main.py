@@ -37,7 +37,7 @@ def getweatherinfo(config, now):
     cursor = sql.execute("select json from weather_info order by update_t desc limit 1", ())
     obj = json.loads(sql.fecth_one(cursor)[0])
     sunset = datetime.datetime.fromtimestamp(int(obj["sys"]["sunset"]))
-    sunrise = datetime.daetime.fromtimestamp(int(obj["sys"]["sunrise"]))
+    sunrise = datetime.datetime.fromtimestamp(int(obj["sys"]["sunrise"]))
     if sunset.hour == now.hour and sunset.minute == now.minute:
         lights = config.get("hue", "ligths_sunset")
         lightswitch(False, config, lights)
