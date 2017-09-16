@@ -21,13 +21,29 @@ def todayAt(hr, min=0):
     return now.replace(hour=hr, minute=min)
 
 
-def getweatherinfo(config,now):
+def lightswitch(state, config, lights):
+    light_a = lights.split(",")
+    hu = Huebridge(config.get("hue", "bridge"), config.get("hue", "device"), config.get("hue", "username"))
+    for light in light_a:
+        if state:
+            hu.turnon(light)
+        else:
+            hu.turnoff(light)
+
+
+def getweatherinfo(config, now):
     sql = Sqlite()
     sql.connect(config.get("global", "database"))
     cursor = sql.execute("select json from weather_info order by update_t desc limit 1", ())
     obj = json.loads(sql.fecth_one(cursor)[0])
     sunset = datetime.datetime.fromtimestamp(int(obj["sys"]["sunset"]))
     sunrise = datetime.daetime.fromtimestamp(int(obj["sys"]["sunrise"]))
+    if sunset.hour == now.hour and sunset.minute == now.minute:
+        lights = config.get("hue", "ligths_sunset")
+        lightswitch(False, config, lights)
+    if sunrise.hour == now.hour and sunrise.minute == now.minute:
+        lights = config.get("hue", "ligths_sunrise")
+        lightswitch(True, config, lights)
 
 
 def checktime(config):
