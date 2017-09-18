@@ -40,9 +40,11 @@ def getweatherinfo(config, now):
     sunrise = datetime.datetime.fromtimestamp(int(obj["sys"]["sunrise"]))
     if sunset.hour == now.hour and sunset.minute == now.minute:
         lights = config.get("hue", "ligths_sunset")
+        print("Turning off the lights")
         lightswitch(False, config, lights)
     if sunrise.hour == now.hour and sunrise.minute == now.minute:
         lights = config.get("hue", "ligths_sunrise")
+        print("Turning on the lights")
         lightswitch(True, config, lights)
 
 
