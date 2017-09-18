@@ -12,7 +12,7 @@ def weatherupdate(config):
     res = wea.current(config.get("weather", "city"))
     sql = Sqlite()
     sql.connect(config.get("global", "database"))
-    sql.execute("insert into weather_info values(1,?,DATETIME('now'))", (res, ))
+    sql.execute("insert into weather_info values(1,?,DATETIME('now'))", (json.dumps(res), ))
     sql.commit()
 
 
@@ -52,6 +52,7 @@ def checktime(config):
     weathertime = config.get("weather", "update").split(":")
     updateTime = todayAt(int(weathertime[0]), int(weathertime[1]))
     now = datetime.datetime.now()
+    print("Checking time at:"+str(now))
     if updateTime.hour == now.hour and updateTime.minute == now.minute:
         print("Update weather information")
         weatherupdate(config)
@@ -68,8 +69,10 @@ def createcron(config):
 
 def main():
     print("Start main job")
+    print("Getting configuration")
     config = configparser.ConfigParser(allow_no_value=True)
     config.read('eveiab.conf')
+    print("Creating cron service")
     createcron(config)
 
 
