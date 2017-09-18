@@ -53,6 +53,7 @@ def checktime(config):
     updateTime = todayAt(int(weathertime[0]), int(weathertime[1]))
     now = datetime.datetime.now()
     if updateTime.hour == now.hour and updateTime.minute == now.minute:
+        print("Update weather information")
         weatherupdate(config)
     else:
         #Check if we need to turn on/off the lights
